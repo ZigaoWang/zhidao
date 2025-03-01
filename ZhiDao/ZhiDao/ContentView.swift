@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = LearningViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        HomeView(viewModel: viewModel)
+            .onAppear {
+                // Create a default user if none exists
+                if viewModel.currentUser == nil {
+                    let userId = UUID().uuidString
+                    let user = User(id: userId, name: "用户")
+                    viewModel.currentUser = user
+                    viewModel.saveUserData()
+                }
+            }
     }
 }
 
